@@ -14,6 +14,8 @@ namespace WebApplication1.Models
 
         }
 
+        //public TodoContext() { }
+
         public DbSet<TodoItem> TodoItems { get; set; }
 
     }
