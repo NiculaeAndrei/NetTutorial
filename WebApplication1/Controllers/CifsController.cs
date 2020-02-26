@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
+using WebApplication1.Utils;
+using Newtonsoft.Json;
+
 
 namespace WebApplication1.Controllers
 {
@@ -41,37 +44,7 @@ namespace WebApplication1.Controllers
             return cif;
         }
 
-        // PUT: api/Cifs/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCif(long id, Cif cif)
-        {
-            if (id != cif.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(cif).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CifExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+        
 
         // POST: api/Cifs
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
@@ -82,6 +55,21 @@ namespace WebApplication1.Controllers
             if (CifValidator.Validate(cif.Name) == true)
             {
                 cif.IsValid = true;
+                string _name=cif.Name;
+                if (cif.Name.StartsWith("RO"))
+                { _name = cif.Name.Substring(2);}
+                string rez = AnafReq.SendReq(_name);
+                
+                RootObject t= JsonConvert.DeserializeObject<RootObject>(rez);
+                
+                if(!t.cod.Equals(200)) return BadRequest();
+                
+                cif.Denumire = t.found.First().denumire;
+                cif.Adresa = t.found.First().adresa;
+                cif.PlatitorTVA = t.found.First().scpTVA;
+                cif.StatusTVAIncasare = t.found.First().statusTvaIncasare;
+                cif.StatusActiv = t.found.First().statusInactivi;
+
                 _context.Cifs.Add(cif);
                 await _context.SaveChangesAsync();
 
@@ -92,22 +80,7 @@ namespace WebApplication1.Controllers
             else return BadRequest();
         }
 
-        // DELETE: api/Cifs/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Cif>> DeleteCif(long id)
-        {
-            var cif = await _context.Cifs.FindAsync(id);
-            if (cif == null)
-            {
-                return NotFound();
-            }
-
-            _context.Cifs.Remove(cif);
-            await _context.SaveChangesAsync();
-
-            return cif;
-        }
-
+        
         private bool CifExists(long id)
         {
             return _context.Cifs.Any(e => e.Id == id);

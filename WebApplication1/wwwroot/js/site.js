@@ -1,8 +1,10 @@
 const uri = 'api/Cifs';
-let todos = [];
+
+
 
 function addItem() {
-  const addNameTextbox = document.getElementById('add-cif');
+    const addNameTextbox = document.getElementById('add-cif');
+    const tableElement = document.getElementsByClassName('cif-table');
 
   const item = {
     isValid: false,
@@ -17,10 +19,21 @@ function addItem() {
     },
     body: JSON.stringify(item)
   })
-    .then(response => response.json())
-    .then(() => {
-      getItems();
-      addNameTextbox.value = '';
+      .then(response => {
+          if (response.ok) {
+              return response.json();
+          }
+
+          return null;
+      })
+    .then(cif => {
+        addNameTextbox.value = '';
+
+        if (!cif) {
+            return;
+        }
+
+        _displayItems(cif);
     })
     .catch(error => console.error('Unable to add item.', error));
 }
@@ -31,53 +44,54 @@ function addItem() {
 
 
 
-
-
-
-function closeInput() {
-  document.getElementById('editForm').style.display = 'none';
-}
-
-function _displayCount(itemCount) {
-  const name = (itemCount === 1) ? 'to-do' : 'to-dos';
-
-  document.getElementById('counter').innerText = `${itemCount} ${name}`;
-}
-
-
-
-
-
-
-
 function _displayItems(data) {
-  const tBody = document.getElementById('todos');
-  tBody.innerHTML = '';
+    if (!data) {
+        return;
+    }
 
-  _displayCount(data.length);
+  const tBody = document.getElementById('todos');
+
+  
 
   const button = document.createElement('button');
 
-  data.forEach(item => {
     let isCompleteCheckbox = document.createElement('input');
     isCompleteCheckbox.type = 'checkbox';
     isCompleteCheckbox.disabled = true;
-    isCompleteCheckbox.checked = item.isComplete;
+    isCompleteCheckbox.checked = data.isValid;
 
    
 
     let tr = tBody.insertRow();
     
     let td1 = tr.insertCell(0);
-    td1.appendChild(isCompleteCheckbox);
+    let textNode = document.createTextNode(data.isValid);
+    td1.appendChild(textNode);
 
     let td2 = tr.insertCell(1);
-    let textNode = document.createTextNode(item.name);
+    textNode = document.createTextNode(data.name);
     td2.appendChild(textNode);
 
+    let td3 = tr.insertCell(2);
+    textNode = document.createTextNode(data.denumire);
+    td3.appendChild(textNode);
+
+    let td4 = tr.insertCell(3);
+    textNode = document.createTextNode(data.adresa);
+    td4.appendChild(textNode);
+
+
+    let td5 = tr.insertCell(4);
+    textNode = document.createTextNode(data.platitorTVA);
+    td5.appendChild(textNode);
+
+    let td6 = tr.insertCell(5);
+    textNode = document.createTextNode(data.statusTVAIncasare);
+    td6.appendChild(textNode);
     
+    let td7 = tr.insertCell(6);
+    textNode = document.createTextNode(data.statusActiv);
+    td7.appendChild(textNode);
 
-  });
-
-  todos = data;
+  
 }

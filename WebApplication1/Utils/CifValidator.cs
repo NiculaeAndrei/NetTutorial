@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication1.Controllers
+namespace WebApplication1.Utils
 {
     public class CifValidator
     {
@@ -13,7 +13,9 @@ namespace WebApplication1.Controllers
             if (!int.TryParse(cif, out _))
             {
                 if (cif.Substring(0, 2).Equals("RO"))
-                    cif = cif.Substring(2);
+                { cif = cif.Substring(2); }
+
+                else return false;
 
             }
 
