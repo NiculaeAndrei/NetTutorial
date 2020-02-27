@@ -54,8 +54,16 @@ namespace WebApplication1.Controllers
         {
             if (CifValidator.Validate(cif.Name) == true)
             {
+
+
+                cif.IsCached = false;
+                cif.DataApel=DateTime.Now.ToString("yyyy-MM-dd");
                 cif.IsValid = true;
                 string _name=cif.Name;
+
+                var query = await _context.Cifs.Where(s => s.DataApel == cif.DataApel && s.Name == cif.Name).FirstOrDefaultAsync();
+                if (query == null) { 
+
                 if (cif.Name.StartsWith("RO"))
                 { _name = cif.Name.Substring(2);}
                 string rez = AnafReq.SendReq(_name);
@@ -69,13 +77,16 @@ namespace WebApplication1.Controllers
                 cif.PlatitorTVA = t.found.First().scpTVA;
                 cif.StatusTVAIncasare = t.found.First().statusTvaIncasare;
                 cif.StatusActiv = t.found.First().statusInactivi;
-
+                cif.IsCached = true;
                 _context.Cifs.Add(cif);
                 await _context.SaveChangesAsync();
+                cif.IsCached = false;
 
-                //return CreatedAtAction("GetCif", new { id = cif.Id }, cif);
-                return CreatedAtAction(nameof(GetCif), new { id = cif.Id }, cif);
+                    //return CreatedAtAction("GetCif", new { id = cif.Id }, cif);
+                    return CreatedAtAction(nameof(GetCif), new { id = cif.Id }, cif);
+                }
 
+                return CreatedAtAction(nameof(GetCif), new { id = query.Id }, query);
             }
             else return BadRequest();
         }

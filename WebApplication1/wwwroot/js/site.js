@@ -49,6 +49,10 @@ function _displayItems(data) {
         return;
     }
 
+    if (data.isCached === true) {
+        alert("Datele sunt salvate local");
+    }
+
   const tBody = document.getElementById('todos');
 
   

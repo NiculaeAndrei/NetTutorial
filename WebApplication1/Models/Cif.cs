@@ -23,6 +23,8 @@ namespace WebApplication1.Models
 
         public bool StatusActiv { get; set; }
         
+        public string DataApel { get; set; }
 
+        public bool IsCached { get; set; }
     }
 }

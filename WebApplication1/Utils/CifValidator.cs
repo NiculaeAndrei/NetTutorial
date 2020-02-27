@@ -35,6 +35,8 @@ namespace WebApplication1.Utils
                 cntnr = cntnr / 10;
             }
             int rez = (sum * 10) % 11;
+            if (rez == 10)
+            { rez = 0; }
 
             return rez == cifcnt;
 
