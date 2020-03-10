@@ -21,10 +21,12 @@ function addItem() {
   })
       .then(response => {
           if (response.ok) {
+              
               return response.json();
           }
-
-          return null;
+          else {
+              response.text().then(text => { alert(text); });
+          }
       })
     .then(cif => {
         addNameTextbox.value = '';
@@ -35,7 +37,12 @@ function addItem() {
 
         _displayItems(cif);
     })
-    .catch(error => console.error('Unable to add item.', error));
+      .catch(error => {
+          if (error.toString().includes('TypeError: Failed to fetch'))
+              alert('Unable to add item. API is unavailable');
+          
+             
+      });
 }
 
 

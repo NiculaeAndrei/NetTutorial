@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WebApplication1.Models
+﻿namespace WebApplication1.Models
 {
     public class Cif
     {
@@ -13,16 +8,16 @@ namespace WebApplication1.Models
 
         public bool IsValid { get; set; }
 
-        public string Denumire { get; set;}
+        public string Denumire { get; set; }
 
-        public string Adresa { get; set;}
+        public string Adresa { get; set; }
 
         public bool PlatitorTVA { get; set; }
 
         public bool StatusTVAIncasare { get; set; }
 
         public bool StatusActiv { get; set; }
-        
+
         public string DataApel { get; set; }
 
         public bool IsCached { get; set; }

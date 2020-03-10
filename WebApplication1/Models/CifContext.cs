@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 
 namespace WebApplication1.Models
 {
-    public class CifContext:DbContext
+    public class CifContext : DbContext
     {
         public CifContext(DbContextOptions<CifContext> options)
           : base(options)
@@ -19,7 +15,7 @@ namespace WebApplication1.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Cif>().ToTable("Cif");
-           
+
         }
     }
 }

@@ -1,25 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace WebApplication1.Utils
 {
     public class CifValidator
     {
 
-        public static bool Validate(string cif) 
+        public static bool Validate(string cif)
         {
+            if (!Regex.Match(cif, @"^(RO)?([0-9]{2,10}$)").Success)
+            {
+                return false;
+            }
+
             if (!int.TryParse(cif, out _))
             {
                 if (cif.Substring(0, 2).Equals("RO"))
-                { cif = cif.Substring(2); }
-
-                else return false;
-
+                {
+                    cif = cif.Substring(2);
+                }
             }
 
-            if (cif.Length > 10 || cif.Length<2) return false;
+            if (cif.Length > 10 || cif.Length < 2)
+            {
+                return false;
+            }
 
             int _cif;
             int.TryParse(cif, out _cif);

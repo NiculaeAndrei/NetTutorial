@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net.Http;
-using WebApplication1.Models;
-using Newtonsoft.Json;
-using System.Net.Http.Headers;
-using RestSharp;
+﻿using RestSharp;
+using System;
 
 
 namespace WebApplication1.Utils
